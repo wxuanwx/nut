@@ -1,9 +1,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import { ErrorBoundary } from './components/common/ErrorBoundary';
-import './index.scss';
+import App from '@/App';
+import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+import '@/index.scss';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error("Could not find root element");

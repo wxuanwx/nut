@@ -1,20 +1,22 @@
 
 import React from 'react';
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import LoginScreen from '../pages/Login';
-import Home from '../pages/Home';
-import About from '../pages/About';
-import TeacherDashboard from '../pages/TeacherDashboard';
-import StudentDashboard from '../pages/StudentDashboard';
+import { useAuth } from '@/contexts/AuthContext';
+import Login from '@/pages/Login';
+import Home from '@/pages/Home';
+import About from '@/pages/About';
+import TeacherDashboard from '@/pages/TeacherDashboard';
+import StudentDashboard from '@/pages/StudentDashboard';
 
 // 教师模块组件
-import StudentList from '../components/teacher/StudentList';
-import TaskCenter from '../components/teacher/TaskCenter';
-import TargetLibrary from '../components/common/features/TargetLibrary';
-import ReportCenter from '../components/teacher/ReportCenter';
-import ReviewAnalytics from '../components/teacher/ReviewAnalytics';
-import StudentDetail from '../components/teacher/StudentDetail';
+import StudentList from '@/components/teacher/StudentList';
+import TaskCenter from '@/components/teacher/TaskCenter';
+import TargetLibrary from '@/components/common/features/TargetLibrary';
+import ReportCenter from '@/components/teacher/ReportCenter';
+import ReviewAnalytics from '@/components/teacher/ReviewAnalytics';
+import StudentDetail from '@/components/teacher/StudentDetail';
+import UserProfile from '@/components/teacher/UserProfile';
+import AccountSettings from '@/components/teacher/AccountSettings';
 
 // 路由守卫
 const ProtectedRoute = ({ allowedRoles }: { allowedRoles: string[] }) => {
@@ -26,7 +28,7 @@ const ProtectedRoute = ({ allowedRoles }: { allowedRoles: string[] }) => {
 
 export const router = createBrowserRouter([
   { path: '/', element: <Navigate to="/login" replace /> },
-  { path: '/login', element: <LoginScreen onLogin={() => {}} /> },
+  { path: '/login', element: <Login /> },
   
   // 教师端页面结构
   {
@@ -44,7 +46,9 @@ export const router = createBrowserRouter([
           { path: 'tasks', element: <TaskCenter /> },
           { path: 'knowledge', element: <TargetLibrary role="teacher" /> },
           { path: 'reports', element: <ReportCenter /> },
-          { path: 'review', element: <ReviewAnalytics /> }
+          { path: 'review', element: <ReviewAnalytics /> },
+          { path: 'profile', element: <UserProfile /> },
+          { path: 'settings', element: <AccountSettings /> }
         ]
       }
     ]
@@ -60,7 +64,7 @@ export const router = createBrowserRouter([
         element: <StudentDashboard />,
         children: [
           { index: true, element: <Navigate to="dashboard" replace /> },
-          { path: 'dashboard', element: null /* Dashboard 内容在 StudentDashboard 内部处理 */ },
+          { path: 'dashboard', element: null },
           { path: 'planning', element: null },
           { path: 'tasks', element: null },
           { path: 'knowledge', element: <TargetLibrary role="student" /> }

@@ -1,4 +1,3 @@
-
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from './Icons';
 
@@ -13,19 +12,14 @@ interface State {
 /**
  * Error boundary component to catch and handle errors in the child component tree.
  */
-// Fix: Use Component directly from named import to ensure proper generic application and inheritance for props/state
 export class ErrorBoundary extends Component<Props, State> {
-  // Fix: Explicitly declare and initialize state property for better type recognition across different TS versions
+  // Fix: Declare and initialize state as a class property to ensure it's properly typed and exist on the class instance
   public state: State = {
     hasError: false
   };
 
   constructor(props: Props) {
     super(props);
-    // Fix: Redundant initialization to ensure 'state' property is recognized in the constructor (Line 20)
-    this.state = {
-      hasError: false
-    };
   }
 
   public static getDerivedStateFromError(_: Error): State {
@@ -39,9 +33,9 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public render() {
-    // Fix: Accessing this.state which is now explicitly declared and inherited correctly (Line 34)
+    // Fix: Access state through 'this.state' which is properly inherited from Component base class
     if (this.state.hasError) {
-      // You can render any custom fallback UI
+      // Fallback UI when an error is caught
       return (
         <div className="flex flex-col items-center justify-center min-h-[400px] p-6 text-center">
           <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4">
@@ -61,7 +55,7 @@ export class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    // Fix: Accessing this.props which is now properly recognized from Component inheritance (Line 55)
+    // Fix: Access props through 'this.props' which is inherited from Component base class
     return this.props.children;
   }
 }
