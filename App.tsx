@@ -30,17 +30,15 @@ const MainApp: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 基础重定向 */}
         <Route path="/" element={<Navigate to="/login" replace />} />
-        
-        {/* 登录页 */}
         <Route path="/login" element={<LoginScreen onLogin={() => {}} />} />
 
         {/* 教师端模块 */}
         <Route element={<ProtectedRoute allowedRoles={['teacher']} />}>
           <Route path="/teacher" element={<TeacherDashboard onLogout={() => {}} />}>
             <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="dashboard" element={null} />
+            {/* 修复：dashboard 路由不再返回 null，以便渲染 TeacherDashboard 内部的默认视图 */}
+            <Route path="dashboard" element={<div className="animate-in fade-in duration-500">加载中...</div>} />
             <Route path="students" element={<StudentList onStudentClick={(id) => {}} />} />
             <Route path="students/:id" element={<StudentDetail onBack={() => window.history.back()} onNavigateToTranscript={() => {}} />} />
             <Route path="tasks" element={<TaskCenter />} />
@@ -56,10 +54,10 @@ const MainApp: React.FC = () => {
         <Route element={<ProtectedRoute allowedRoles={['student']} />}>
           <Route path="/student" element={<StudentDashboard />}>
              <Route index element={<Navigate to="dashboard" replace />} />
-             <Route path="dashboard" element={null} />
-             <Route path="planning" element={null} />
-             <Route path="tasks" element={null} />
-             <Route path="knowledge" element={null} />
+             <Route path="dashboard" element={<div className="animate-in fade-in duration-500">加载中...</div>} />
+             <Route path="planning" element={<div className="animate-in fade-in duration-500">加载中...</div>} />
+             <Route path="tasks" element={<div className="animate-in fade-in duration-500">加载中...</div>} />
+             <Route path="knowledge" element={<div className="animate-in fade-in duration-500">加载中...</div>} />
           </Route>
         </Route>
       </Routes>

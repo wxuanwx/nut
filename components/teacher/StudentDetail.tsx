@@ -7,7 +7,9 @@ import {
   Clock, Paperclip, MessageCircle,
   Zap, AlertCircle, ChevronDown, ChevronUp, Loader2, RefreshCw, CheckCircle, XCircle
 } from '../common/Icons';
-import { GoogleGenAI } from "@google/genai";
+import { aiService } from '../../utils/ai';
+import { cn } from '../../utils/cn';
+// Fixed: Removed 'Type' which is not exported from types.ts
 import { DetailTab, RiskLevel } from '../../types';
 import { mockStudents } from './StudentList';
 import StudentBasicInfo from './StudentBasicInfo';
@@ -79,16 +81,26 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ onBack, onNavigateToTrans
     setIsDiagnosing(true);
     setIsPanelExpanded(true); 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: `Diagnose student ${student.name} application dimensions...`,
-        config: { responseMimeType: "application/json" }
-      });
-      if (response.text) {
-        const mappedData = JSON.parse(response.text).map((item: any) => ({
+      const response = await aiService.generateJSON(
+        `Diagnose student ${student.name} application dimensions based on these metrics: GPA 3.8, TOEFL 92. Provide risk levels and brief evidence.`,
+        {
+          type: "ARRAY",
+          items: {
+            type: "OBJECT",
+            properties: {
+              id: { type: "STRING" },
+              label: { type: "STRING" },
+              level: { type: "STRING" },
+              statusText: { type: "STRING" }
+            }
+          }
+        }
+      );
+      
+      if (response) {
+        const mappedData = response.map((item: any) => ({
           ...item,
-          icon: TrendingDown // Simplification
+          icon: TrendingDown 
         }));
         setRiskDimensions(mappedData);
       }
@@ -124,41 +136,70 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ onBack, onNavigateToTrans
       {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage(null)} />}
       <header className="bg-white dark:bg-zinc-900 border-b border-[#e5e0dc] dark:border-white/5 px-6 py-3 flex justify-between items-center z-40 transition-colors">
          <div className="flex items-center gap-4">
-            <button onClick={onBack} className="flex items-center gap-1 text-xs text-gray-400 hover:text-primary-600"><ArrowLeft className="w-3.5 h-3.5" />{isEn ? 'Back' : '返回'}</button>
+            <button onClick={onBack} className="flex items-center gap-1 text-xs text-gray-400 hover:text-primary-600 font-bold transition-colors">
+              <ArrowLeft className="w-3.5 h-3.5" />
+              {isEn ? 'Back' : '返回'}
+            </button>
             <div className="flex items-center gap-3">
                <img src={student.avatarUrl} alt="avatar" className="w-8 h-8 rounded-full border border-gray-100" />
-               <div><h1 className="text-base font-bold text-gray-900 dark:text-white leading-tight">{student.name}</h1></div>
+               <h1 className="text-base font-bold text-gray-900 dark:text-white leading-tight">{student.name}</h1>
             </div>
          </div>
          <div className="flex gap-4">
             {riskDimensions.map(dim => (
                 <div key={dim.id} className="flex flex-col items-center gap-0.5">
-                   <div className={`w-1.5 h-1.5 rounded-full ${dim.level === 'high' ? 'bg-red-500' : dim.level === 'medium' ? 'bg-orange-500' : 'bg-green-500'}`}></div>
+                   <div className={cn(
+                     "w-1.5 h-1.5 rounded-full",
+                     dim.level === 'high' ? 'bg-red-500' : dim.level === 'medium' ? 'bg-orange-500' : 'bg-green-500'
+                   )}></div>
                    <span className="text-[9px] font-bold text-gray-400 uppercase">{dim.label}</span>
                 </div>
             ))}
          </div>
       </header>
 
-      <div className={`bg-white dark:bg-zinc-900 border-b border-[#e5e0dc] transition-all duration-300 overflow-hidden z-30 shadow-sm ${isPanelExpanded ? 'max-h-[400px]' : 'max-h-12'}`}>
+      <div className={cn(
+        "bg-white dark:bg-zinc-900 border-b border-[#e5e0dc] transition-all duration-300 overflow-hidden z-30 shadow-sm",
+        isPanelExpanded ? 'max-h-[400px]' : 'max-h-12'
+      )}>
          <div onClick={() => setIsPanelExpanded(!isPanelExpanded)} className="px-6 py-3 flex justify-between items-center cursor-pointer hover:bg-gray-50/50">
-            <button onClick={(e) => {e.stopPropagation(); handleDeepDiagnosis();}} className="flex items-center gap-2 px-3 py-1 bg-primary-900 text-white rounded text-[10px] font-bold uppercase tracking-widest">{isDiagnosing ? <Loader2 className="w-3 h-3 animate-spin"/> : <Zap className="w-3 h-3 text-yellow-300"/>}{isEn ? 'AI Diagnosis' : 'AI 深度诊断'}</button>
-            <div className="flex items-center gap-2 text-xs font-bold text-gray-400">{isPanelExpanded ? <ChevronUp className="w-4 h-4"/> : <ChevronDown className="w-4 h-4"/>}</div>
+            <button 
+              onClick={(e) => {e.stopPropagation(); handleDeepDiagnosis();}} 
+              disabled={isDiagnosing}
+              className="flex items-center gap-2 px-3 py-1 bg-primary-900 dark:bg-zinc-800 text-white rounded text-[10px] font-bold uppercase tracking-widest disabled:opacity-50"
+            >
+              {isDiagnosing ? <Loader2 className="w-3 h-3 animate-spin"/> : <Zap className="w-3 h-3 text-yellow-300"/>}
+              {isEn ? 'AI Diagnosis' : 'AI 深度诊断'}
+            </button>
+            <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
+              {isPanelExpanded ? <ChevronUp className="w-4 h-4"/> : <ChevronDown className="w-4 h-4"/>}
+            </div>
          </div>
          <div className="px-8 pb-8 pt-2 grid grid-cols-5 gap-3">
             {riskDimensions.map(dim => (
-                <div key={dim.id} className="p-3 rounded-xl border border-gray-100 bg-gray-50/30">
-                    <p className="text-xs font-black text-gray-900 mb-1">{dim.label}</p>
-                    <p className="text-[10px] text-gray-500 line-clamp-2">{dim.statusText}</p>
+                <div key={dim.id} className="p-3 rounded-xl border border-gray-100 dark:border-white/5 bg-gray-50/30 dark:bg-zinc-850">
+                    <p className="text-xs font-black text-gray-900 dark:text-zinc-100 mb-1">{dim.label}</p>
+                    <p className="text-[10px] text-gray-500 dark:text-zinc-400 line-clamp-2">{dim.statusText}</p>
                 </div>
             ))}
          </div>
       </div>
 
-      <nav className="bg-white dark:bg-zinc-900 border-b border-[#e5e0dc] px-6">
+      <nav className="bg-white dark:bg-zinc-900 border-b border-[#e5e0dc] dark:border-white/5 px-6">
          <div className="flex gap-8 overflow-x-auto no-scrollbar">
             {tabs.map(tab => (
-               <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`py-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id ? 'border-primary-600 text-primary-900 dark:text-primary-300' : 'border-transparent text-gray-400 hover:text-gray-600'}`}>{tab.icon}{tab.label}</button>
+               <button 
+                key={tab.id} 
+                onClick={() => setActiveTab(tab.id)} 
+                className={cn(
+                  "py-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 whitespace-nowrap",
+                  activeTab === tab.id 
+                    ? 'border-primary-600 text-primary-900 dark:text-primary-300 dark:border-primary-500' 
+                    : 'border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300'
+                )}
+               >
+                {tab.icon}{tab.label}
+               </button>
             ))}
          </div>
       </nav>
