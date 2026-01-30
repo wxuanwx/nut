@@ -7,7 +7,8 @@ import {
   CheckCheck, RotateCcw, Flag, FileText, Check, Save,
   Trash2
 } from '../common/Icons';
-import { mockStudents } from './StudentList';
+// Fixed: Import MOCK_STUDENTS from staticData instead of missing export in StudentList
+import { MOCK_STUDENTS } from '../../data/staticData';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 // --- Types ---
@@ -243,7 +244,8 @@ const TaskCenter: React.FC = () => {
       return;
     }
 
-    const student = mockStudents.find(s => s.id === newTaskForm.studentId);
+    // Fixed: Using MOCK_STUDENTS for lookup
+    const student = MOCK_STUDENTS.find(s => s.id === newTaskForm.studentId);
     
     const newTask: Task = {
       id: `task-${Date.now()}`,
@@ -586,7 +588,7 @@ const TaskCenter: React.FC = () => {
                            onChange={(e) => setNewTaskForm({...newTaskForm, studentId: e.target.value})}
                         >
                            <option value="">{isEn ? 'Select...' : '选择学生'}</option>
-                           {mockStudents.map(s => (
+                           {MOCK_STUDENTS.map(s => (
                               <option key={s.id} value={s.id}>{s.name} ({s.grade})</option>
                            ))}
                         </select>

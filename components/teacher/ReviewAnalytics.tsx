@@ -10,7 +10,8 @@ import {
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart as RePieChart, Pie, Cell, Legend
 } from 'recharts';
-import { mockStudents } from './StudentList';
+// Fixed: Import MOCK_STUDENTS from staticData instead of missing export in StudentList
+import { MOCK_STUDENTS } from '../../data/staticData';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 // --- Types ---
@@ -59,7 +60,8 @@ const keyActionsMock: KeyAction[] = [
 
 const ReviewAnalytics: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'aggregate' | 'individual'>('aggregate');
-  const [selectedStudentId, setSelectedStudentId] = useState<string>(mockStudents[0].id);
+  // Fixed: Use MOCK_STUDENTS
+  const [selectedStudentId, setSelectedStudentId] = useState<string>(MOCK_STUDENTS[0].id);
   const [syncStatus, setSyncStatus] = useState<Record<string, boolean>>({});
   const [mounted, setMounted] = useState(false);
   
@@ -73,7 +75,8 @@ const ReviewAnalytics: React.FC = () => {
     return () => clearTimeout(timer);
   }, [activeTab, selectedStudentId]);
 
-  const activeStudent = mockStudents.find(s => s.id === selectedStudentId) || mockStudents[0];
+  // Fixed: Use MOCK_STUDENTS for active student lookup
+  const activeStudent = MOCK_STUDENTS.find(s => s.id === selectedStudentId) || MOCK_STUDENTS[0];
 
   const handleSync = (id: string) => {
     setSyncStatus(prev => ({ ...prev, [id]: true }));
@@ -284,7 +287,8 @@ const ReviewAnalytics: React.FC = () => {
                   </div>
                </div>
                <div className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
-                  {mockStudents.filter(s => s.phase.includes('Phase 4') || s.phase.includes('Phase 5') || s.id === '1').map(s => (
+                  {/* Fixed: Use MOCK_STUDENTS */}
+                  {MOCK_STUDENTS.filter(s => s.phase.includes('Phase 4') || s.phase.includes('Phase 5') || s.id === '1').map(s => (
                      <div 
                         key={s.id}
                         onClick={() => setSelectedStudentId(s.id)}

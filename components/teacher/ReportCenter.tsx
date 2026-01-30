@@ -7,7 +7,8 @@ import {
   Stamp, Calendar, School, BarChart3, GraduationCap,
   MessageSquare, Check, FileSpreadsheet
 } from '../common/Icons';
-import { mockStudents } from './StudentList';
+// Fixed: Import MOCK_STUDENTS from staticData instead of missing export in StudentList
+import { MOCK_STUDENTS } from '../../data/staticData';
 import { initialTranscript } from './StudentBasicInfo';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -79,7 +80,8 @@ const reportChartData = [
 
 const ReportCenter: React.FC<ReportCenterProps> = ({ initialStudentId, initialTemplate }) => {
   const [selectedTemplate, setSelectedTemplate] = useState<ReportType>(initialTemplate || 'comprehensive');
-  const [selectedStudentId, setSelectedStudentId] = useState<string>(initialStudentId || mockStudents[0].id);
+  // Fixed: Use MOCK_STUDENTS for initial state
+  const [selectedStudentId, setSelectedStudentId] = useState<string>(initialStudentId || MOCK_STUDENTS[0].id);
   const [isParentMode, setIsParentMode] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -100,7 +102,8 @@ const ReportCenter: React.FC<ReportCenterProps> = ({ initialStudentId, initialTe
     return () => clearTimeout(timer);
   }, [selectedTemplate, selectedStudentId]);
 
-  const activeStudent = mockStudents.find(s => s.id === selectedStudentId) || mockStudents[0];
+  // Fixed: Using MOCK_STUDENTS for active student lookup
+  const activeStudent = MOCK_STUDENTS.find(s => s.id === selectedStudentId) || MOCK_STUDENTS[0];
 
   const handleTemplateClick = (id: ReportType) => {
     setIsGenerating(true);
@@ -171,7 +174,8 @@ const ReportCenter: React.FC<ReportCenterProps> = ({ initialStudentId, initialTe
                       value={selectedStudentId}
                       onChange={(e) => setSelectedStudentId(e.target.value)}
                    >
-                      {mockStudents.map(s => (
+                      {/* Fixed: Use MOCK_STUDENTS */}
+                      {MOCK_STUDENTS.map(s => (
                          <option key={s.id} value={s.id}>{s.name} ({s.grade})</option>
                       ))}
                    </select>

@@ -11,7 +11,8 @@ import { aiService } from '../../utils/ai';
 import { cn } from '../../utils/cn';
 // Fixed: Removed 'Type' which is not exported from types.ts
 import { DetailTab, RiskLevel } from '../../types';
-import { mockStudents } from './StudentList';
+// Fixed: Import MOCK_STUDENTS from staticData instead of missing export in StudentList
+import { MOCK_STUDENTS } from '../../data/staticData';
 import StudentBasicInfo from './StudentBasicInfo';
 import StudentMaterials, { INITIAL_FILES, FileItem } from './StudentMaterials';
 import StudentPlanning from './StudentPlanning';
@@ -56,7 +57,8 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ onBack, onNavigateToTrans
   const { language } = useLanguage();
   const isEn = language === 'en-US';
   
-  const student = mockStudents.find(s => s.id === id);
+  // Fixed: Using MOCK_STUDENTS for lookups
+  const student = MOCK_STUDENTS.find(s => s.id === id);
 
   const initialRisks: RiskDimension[] = useMemo(() => [
     { 

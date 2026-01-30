@@ -71,3 +71,17 @@ export type DetailTab =
   | 'Recommendations'
   | 'OfferTracking'
   | 'Communication';
+
+// Added UniversitySchema for static data and planning modules
+export interface UniversitySchema {
+  id: string;
+  name: string;
+  cnName: string;
+  logo: string;
+  rank: number;
+  region: string;
+  tags: string[];
+  avgGpa: number;
+  minToefl: number;
+  avgSat: number;
+}

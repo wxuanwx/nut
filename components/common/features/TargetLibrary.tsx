@@ -13,7 +13,8 @@ import {
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
-import { mockStudents } from '../../teacher/StudentList';
+// Fixed: Import MOCK_STUDENTS from staticData instead of missing export in StudentList
+import { MOCK_STUDENTS } from '../../../data/staticData';
 import { useLanguage } from '../../../contexts/LanguageContext';
 
 interface EmploymentStatItem { name: string; count: number; }

@@ -1,0 +1,26 @@
+
+:root {
+  --primary-font: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--primary-font);
+  background-color: #f9f8f6;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dark body {
+  background-color: #09090b;
+  color: #fafafa;
+}
+
+.custom-scrollbar {
+  &::-webkit-scrollbar { width: 6px; height: 6px; }
+  &::-webkit-scrollbar-thumb { 
+    background: #d6d3d1; 
+    border-radius: 10px; 
+  }
+}

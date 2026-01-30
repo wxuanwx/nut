@@ -1,5 +1,5 @@
 
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from './Icons';
 
 interface Props {
@@ -13,25 +13,35 @@ interface State {
 /**
  * Error boundary component to catch and handle errors in the child component tree.
  */
-export class ErrorBoundary extends React.Component<Props, State> {
-  // Added constructor to ensure props are correctly initialized and recognized by TypeScript
+// Fix: Use Component directly from named import to ensure proper generic application and inheritance for props/state
+export class ErrorBoundary extends Component<Props, State> {
+  // Fix: Explicitly declare and initialize state property for better type recognition across different TS versions
+  public state: State = {
+    hasError: false
+  };
+
   constructor(props: Props) {
     super(props);
+    // Fix: Redundant initialization to ensure 'state' property is recognized in the constructor (Line 20)
     this.state = {
       hasError: false
     };
   }
 
   public static getDerivedStateFromError(_: Error): State {
+    // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // You can also log the error to an error reporting service
     console.error("Uncaught error:", error, errorInfo);
   }
 
   public render() {
+    // Fix: Accessing this.state which is now explicitly declared and inherited correctly (Line 34)
     if (this.state.hasError) {
+      // You can render any custom fallback UI
       return (
         <div className="flex flex-col items-center justify-center min-h-[400px] p-6 text-center">
           <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4">
@@ -51,7 +61,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
       );
     }
 
-    // Accessing children from this.props which is now correctly recognized after explicit inheritance
+    // Fix: Accessing this.props which is now properly recognized from Component inheritance (Line 55)
     return this.props.children;
   }
 }
