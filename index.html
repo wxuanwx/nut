@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nut - Teacher Dashboard</title>
+    <title>Nut - 企业级升学 management system</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
@@ -29,7 +29,6 @@
                 900: '#553c35', 
                 950: '#2d1e1a',
               },
-              // Premium Dark Scale (Zinc)
               zinc: {
                 50: '#fafafa',
                 100: '#f4f4f5',
@@ -40,7 +39,7 @@
                 600: '#52525b',
                 700: '#3f3f46',
                 800: '#27272a',
-                850: '#202023', // Custom intermediate
+                850: '#202023',
                 900: '#18181b',
                 950: '#09090b',
               }
@@ -50,55 +49,39 @@
       }
     </script>
     <style>
-      /* Global Transitions */
       body {
         background-color: #f9f8f6;
         transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
       .dark body {
-        background-color: #09090b; /* Zinc 950 */
+        background-color: #09090b;
       }
-      
-      /* Smooth transitions for all relevant properties */
       *, *::before, *::after {
         transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 200ms;
       }
-
-      /* Custom scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #d6d3d1;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #a8a29e;
-      }
-      .dark ::-webkit-scrollbar-thumb {
-        background: #3f3f46;
-      }
-      .dark ::-webkit-scrollbar-thumb:hover {
-        background: #52525b;
-      }
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+      .dark ::-webkit-scrollbar-thumb { background: #3f3f46; }
     </style>
   <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "recharts": "https://esm.sh/recharts@^2.15.0",
-    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react-router-dom": "https://esm.sh/react-router-dom@7.2.0?deps=react@19.0.0,react-dom@19.0.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.475.0",
+    "recharts": "https://esm.sh/recharts@2.15.0?deps=react@19.0.0,react-dom@19.0.0",
+    "@google/genai": "https://esm.sh/@google/genai@1.34.0",
     "canvas-confetti": "https://esm.sh/canvas-confetti@1.9.2",
-    "html2canvas": "https://esm.sh/html2canvas@1.4.1"
+    "html2canvas": "https://esm.sh/html2canvas@1.4.1",
+    "react/": "https://esm.sh/react@19.0.0/",
+    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
+    "@/": "./"
   }
 }
 </script>

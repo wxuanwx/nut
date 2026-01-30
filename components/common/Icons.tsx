@@ -135,7 +135,8 @@ import {
   ChevronLeft,
   Scissors,
   Type,
-  Languages
+  Languages,
+  Menu
 } from 'lucide-react';
 
 export {
@@ -274,5 +275,6 @@ export {
   ChevronLeft,
   Scissors,
   Type,
-  Languages
+  Languages,
+  Menu
 };
